@@ -435,7 +435,7 @@ def audit_specs(
                     existing_hashes[rid] = req.get("verified_sha256", "")
                     if req.get("status") == "VERIFIED":
                         previously_verified.add(rid)
-        except Exception:
+        except (json.JSONDecodeError, OSError, KeyError):
             pass
 
     report = AuditReport(

@@ -254,7 +254,7 @@ def _scan_src_reverse_traceability(
         rel = _rel_path(py_file, base_dir)
         try:
             raw = py_file.read_text(encoding="utf-8")
-        except Exception:
+        except (OSError, UnicodeDecodeError):
             continue
         if not raw.strip():
             continue

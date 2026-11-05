@@ -3,8 +3,9 @@
 import json
 import re
 from datetime import datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import Any
+from urllib.parse import urlparse
 
 import httpx
 
@@ -63,7 +64,7 @@ def sanitize_decimal(value: Any, default: str = "0.00") -> Decimal:
 
     try:
         return Decimal(cleaned)
-    except Exception:
+    except (InvalidOperation, TypeError, ValueError):
         return Decimal(default)
 
 
@@ -79,8 +80,9 @@ class OllamaExtractor:
     """Offline document extractor communicating exclusively with local Ollama instance."""
 
     def __init__(self, base_url: str = "http://localhost:11434", model: str = "llama3.2:3b"):
-        # Validate that base_url is strictly local
-        if not (base_url.startswith("http://localhost:") or base_url.startswith("http://127.0.0.1:")):
+        # Validate that base_url is strictly local (ADR-002)
+        parsed = urlparse(base_url)
+        if parsed.scheme not in ("http", "https") or parsed.hostname not in ("localhost", "127.0.0.1"):
             raise ValueError("Data privacy directive violated: OllamaExtractor must connect exclusively to local host.")
         self.base_url = base_url.rstrip("/")
         self.model = model
@@ -118,7 +120,7 @@ class OllamaExtractor:
                     err_json = exc.response.json()
                     err_detail = err_json.get("error", "")
                 except Exception:
-                    pass
+                    err_detail = ""
                 msg = f"Local Ollama model '{self.model}' was not found on {self.base_url}."
                 if err_detail:
                     msg += f" (Detail: {err_detail})"
@@ -146,8 +148,8 @@ class OllamaExtractor:
                 inner = json.loads(parsed)
                 if isinstance(inner, dict):
                     return inner
-        except Exception:
-            pass
+        except (json.JSONDecodeError, TypeError, ValueError):
+            parsed = None
 
         # Attempt to extract first outer JSON object via regex
         match = re.search(r"\{.*\}", text, re.DOTALL)
@@ -156,8 +158,8 @@ class OllamaExtractor:
                 candidate = json.loads(match.group(0))
                 if isinstance(candidate, dict):
                     return candidate
-            except Exception:
-                pass
+            except (json.JSONDecodeError, TypeError, ValueError):
+                candidate = None
 
         return {}
 

@@ -1,47 +1,16 @@
 """Local SQLite persistence for rental statements, mortgage records, and contractor invoices."""
 
-import re
 import sqlite3
-from datetime import datetime
+from collections import defaultdict
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
 from src.domain.models import ContractorInvoice, RentalStatement
+from src.ingestion.extractor import normalize_date_to_dmy
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "rent_dashboard.db"
-
-
-# [spec: INGEST-001]
-def normalize_date_to_dmy(raw: str) -> str:
-    """Normalize various date formats (e.g. '10th December 2025', '2025-11-05', '05/11/2025') to DD/MM/YYYY."""
-    if not raw:
-        return ""
-    cleaned = raw.strip()
-    # Strip ordinal suffixes: 1st, 2nd, 3rd, 4th, 7th, 28th
-    cleaned_no_ord = re.sub(r"(\d+)(st|nd|rd|th)", r"\1", cleaned, flags=re.IGNORECASE)
-    cleaned_no_ord = re.sub(r"[,]", " ", cleaned_no_ord)
-    cleaned_no_ord = " ".join(cleaned_no_ord.split())
-
-    formats = [
-        "%d/%m/%Y",
-        "%d-%m-%Y",
-        "%d.%m.%Y",
-        "%Y-%m-%d",
-        "%Y/%m/%d",
-        "%d %B %Y",
-        "%d %b %Y",
-        "%B %d %Y",
-        "%b %d %Y",
-    ]
-    for fmt in formats:
-        try:
-            dt = datetime.strptime(cleaned_no_ord, fmt)
-            return dt.strftime("%d/%m/%Y")
-        except ValueError:
-            pass
-    return raw
 
 
 # [spec: UI-001]
@@ -247,7 +216,8 @@ class Database:
                 ),
             )
             record_id = cursor.lastrowid
-            assert record_id is not None
+            if record_id is None:
+                raise RuntimeError("Failed to retrieve record_id after inserting monthly_record.")
 
             for exp in statement.expenditures:
                 cursor.execute(
@@ -283,7 +253,8 @@ class Database:
                 ),
             )
             record_id = cursor.lastrowid
-            assert record_id is not None
+            if record_id is None:
+                raise RuntimeError("Failed to retrieve record_id after inserting monthly_record.")
             conn.commit()
             return record_id
 
@@ -392,7 +363,8 @@ class Database:
                 ),
             )
             record_id = cursor.lastrowid
-            assert record_id is not None
+            if record_id is None:
+                raise RuntimeError("Failed to retrieve record_id after inserting monthly_record.")
 
             for exp in statement.expenditures:
                 cursor.execute(
@@ -424,12 +396,17 @@ class Database:
             cursor.execute("SELECT * FROM monthly_records")
             records = [dict(row) for row in cursor.fetchall()]
 
+            cursor.execute(
+                "SELECT monthly_record_id, id, description, net, vat, gross FROM expenditures ORDER BY id ASC"
+            )
+            expenditures_by_record = defaultdict(list)
+            for exp in cursor.fetchall():
+                exp_dict = dict(exp)
+                rec_id = exp_dict.pop("monthly_record_id")
+                expenditures_by_record[rec_id].append(exp_dict)
+
             for rec in records:
-                cursor.execute(
-                    "SELECT id, description, net, vat, gross FROM expenditures WHERE monthly_record_id = ? ORDER BY id ASC",
-                    (rec["id"],),
-                )
-                rec["expenditures"] = [dict(exp) for exp in cursor.fetchall()]
+                rec["expenditures"] = expenditures_by_record.get(rec["id"], [])
 
                 payout = Decimal(rec["net_payout"])
                 debit = Decimal(rec["mortgage_debit"])
@@ -767,7 +744,8 @@ class Database:
                 ),
             )
             issue_id = cursor.lastrowid
-            assert issue_id is not None
+            if issue_id is None:
+                raise RuntimeError("Failed to retrieve issue_id after inserting maintenance_issue.")
 
             if initial_note:
                 cursor.execute(
@@ -804,7 +782,8 @@ class Database:
                 (issue_id, author, comment),
             )
             note_id = cursor.lastrowid
-            assert note_id is not None
+            if note_id is None:
+                raise RuntimeError("Failed to retrieve note_id after inserting maintenance_issue_note.")
             conn.commit()
             return note_id
 
@@ -944,33 +923,39 @@ class Database:
             else:
                 cursor.execute("SELECT * FROM maintenance_issues WHERE is_suggested = 0 ORDER BY id DESC")
             issue_rows = [dict(r) for r in cursor.fetchall()]
+            if not issue_rows:
+                return []
+
+            cursor.execute(
+                """
+                SELECT id, issue_id, author, comment, created_at
+                FROM maintenance_issue_notes
+                ORDER BY id ASC
+                """
+            )
+            notes_by_issue = defaultdict(list)
+            for n in cursor.fetchall():
+                n_dict = dict(n)
+                notes_by_issue[n_dict["issue_id"]].append(n_dict)
+
+            cursor.execute(
+                """
+                SELECT mii.issue_id, ci.id, ci.contractor_name, ci.invoice_date, ci.invoice_number,
+                       ci.gross_amount, ci.job_description, ci.file_hash
+                FROM maintenance_issue_invoices mii
+                JOIN contractor_invoices ci ON mii.invoice_id = ci.id
+                ORDER BY ci.id ASC
+                """
+            )
+            invoices_by_issue = defaultdict(list)
+            for inv in cursor.fetchall():
+                inv_dict = dict(inv)
+                i_id = inv_dict.pop("issue_id")
+                invoices_by_issue[i_id].append(inv_dict)
 
             for issue in issue_rows:
-                # Notes
-                cursor.execute(
-                    """
-                    SELECT id, issue_id, author, comment, created_at
-                    FROM maintenance_issue_notes
-                    WHERE issue_id = ?
-                    ORDER BY id ASC
-                    """,
-                    (issue["id"],),
-                )
-                issue["notes"] = [dict(n) for n in cursor.fetchall()]
-
-                # Pinned invoices
-                cursor.execute(
-                    """
-                    SELECT ci.id, ci.contractor_name, ci.invoice_date, ci.invoice_number,
-                           ci.gross_amount, ci.job_description, ci.file_hash
-                    FROM maintenance_issue_invoices mii
-                    JOIN contractor_invoices ci ON mii.invoice_id = ci.id
-                    WHERE mii.issue_id = ?
-                    ORDER BY ci.id ASC
-                    """,
-                    (issue["id"],),
-                )
-                issue["pinned_invoices"] = [dict(inv) for inv in cursor.fetchall()]
+                issue["notes"] = notes_by_issue.get(issue["id"], [])
+                issue["pinned_invoices"] = invoices_by_issue.get(issue["id"], [])
 
             return issue_rows
 
@@ -1123,7 +1108,8 @@ class Database:
                 ),
             )
             cert_id = cursor.lastrowid
-            assert cert_id is not None
+            if cert_id is None:
+                raise RuntimeError("Failed to retrieve cert_id after inserting compliance_certificate.")
             conn.commit()
             return cert_id
 

@@ -21,6 +21,12 @@ def main() -> int:
         help="Path to project config file (default: config.toml)",
     )
     parser.add_argument(
+        "--host",
+        type=str,
+        default="0.0.0.0",  # noqa: S104 - Intentionally allowing 0.0.0.0 for local LAN/Wi-Fi dashboard access
+        help="Host address to bind dashboard (default: 0.0.0.0 for LAN & Wi-Fi access)",
+    )
+    parser.add_argument(
         "--port",
         type=int,
         default=8080,
@@ -36,9 +42,15 @@ def main() -> int:
 
     try:
         create_app(args.config)
-        print(f"\n🚀 Launching Rent Management Dashboard on http://localhost:{args.port}...")
+        if args.host == "0.0.0.0":  # noqa: S104
+            print(
+                f"\n🚀 Launching Rent Management Dashboard on http://localhost:{args.port} (and LAN on port {args.port})..."
+            )
+        else:
+            print(f"\n🚀 Launching Rent Management Dashboard on http://{args.host}:{args.port}...")
         ui.run(
             title="Rent Management Executive Dashboard",
+            host=args.host,
             port=args.port,
             reload=False,
             show=not args.no_browser,

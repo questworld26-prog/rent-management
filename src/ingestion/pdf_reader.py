@@ -1,9 +1,12 @@
 """PDF text extraction utility with degradation resilience."""
 
+import logging
 from pathlib import Path
 
 import pdfplumber
 import pypdf
+
+logger = logging.getLogger(__name__)
 
 
 # [spec: INGEST-007]
@@ -35,8 +38,8 @@ def extract_text_from_pdf(pdf_path: Path | str) -> str:
             raise EncryptedPdfError(f"PDF file is password-protected or encrypted: {path.name}")
     except (pypdf.errors.FileNotDecryptedError, EncryptedPdfError):
         raise EncryptedPdfError(f"PDF file is password-protected or encrypted: {path.name}") from None
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.debug("Failed pre-flight pypdf reader check on %s: %s", path.name, exc)
 
     extracted_pages: list[str] = []
 

@@ -280,8 +280,8 @@ class BatchIngestionService:
             if attempt < max_attempts:
                 raw_text = extract_text_from_pdf(file_path)
 
-        assert last_reconciliation is not None
-        assert statement is not None
+        if last_reconciliation is None or statement is None:
+            raise RuntimeError("Reconciliation failed to initialize statement result.")
 
         # AC-INGEST-003.4: If after 3 attempts any check still fails, reject saving and report failure
         if not last_reconciliation.is_balanced:

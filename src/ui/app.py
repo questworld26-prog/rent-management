@@ -6,7 +6,8 @@ Bound to specifications:
 """
 
 import asyncio
-from decimal import Decimal
+import logging
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
@@ -44,6 +45,8 @@ from src.ui.components import (
     prepare_statements_table_rows,
 )
 from src.ui.theme import DEFAULT_THEME, THEMES, get_theme_css
+
+logger = logging.getLogger(__name__)
 
 
 # [spec: UI-003]
@@ -85,8 +88,8 @@ class ExecutiveDashboardApp:
                     self.ledger_tabs.set_value(self.inv_tab)
                 elif self.stmt_tab:
                     self.ledger_tabs.set_value(self.stmt_tab)
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug("Failed switching to ledger tab: %s", exc)
 
     # [spec: UI-003]
     def set_theme(self, theme_name: str) -> None:
@@ -1010,7 +1013,7 @@ class ExecutiveDashboardApp:
                                 n = Decimal(net_inp.value or "0.00")
                                 v = Decimal(vat_inp.value or "0.00")
                                 gross_inp.value = str((n + v).quantize(Decimal("0.01")))
-                            except Exception:
+                            except (InvalidOperation, TypeError, ValueError):
                                 pass
 
                         net_inp.on("blur", auto_calc_gross)
@@ -1340,6 +1343,14 @@ class ExecutiveDashboardApp:
                 path = Path(raw_path)
                 if not path.is_absolute():
                     path = Path.cwd() / path
+                path = path.resolve()
+
+                allowed_root = Path.cwd().resolve()
+                if not path.is_relative_to(allowed_root):
+                    status_label.set_text(
+                        f"❌ Security violation: File must be within project root ({allowed_root.name})"
+                    )
+                    return
 
                 if not path.exists():
                     status_label.set_text(f"❌ File not found: {path}")
@@ -1429,7 +1440,23 @@ class ExecutiveDashboardApp:
             status_label = ui.label("").classes("text-xs text-gray-300 mt-2")
 
             def start_ingest():
-                path = Path(folder_input.value.strip())
+                raw_folder = folder_input.value.strip() if folder_input.value else ""
+                if not raw_folder:
+                    status_label.set_text("❌ Please enter a folder path")
+                    return
+
+                path = Path(raw_folder)
+                if not path.is_absolute():
+                    path = Path.cwd() / path
+                path = path.resolve()
+
+                allowed_root = Path.cwd().resolve()
+                if not path.is_relative_to(allowed_root):
+                    status_label.set_text(
+                        f"❌ Security violation: Directory must be within project root ({allowed_root.name})"
+                    )
+                    return
+
                 if not path.exists() or not path.is_dir():
                     status_label.set_text(f"❌ Directory not found: {path}")
                     return
