@@ -27,6 +27,20 @@
 
 ## Roadmap & Milestones (Latest at Top)
 
+### Release `v1.4.0`: OWASP Secure Code Review Hardening, Quad-Persona Governance, LAN/Wi-Fi Mobile Access & Modular 6-Gate Architecture
+- **Status**: ✅ RELEASED *(Approved by user)*
+- **Focus**: OWASP Secure Code Review standard implementation, Path Traversal & SSRF defenses, elimination of production assertions, LAN/Wi-Fi mobile dashboard access, SQLite N+1 query elimination, and modular 6-gate release management.
+- **Deliverables**:
+  - [x] **OWASP Security Hardening & Input Sanitization**: Added Bandit `"S"` security linting rules to Ruff and eliminated potential vulnerabilities across ingestion and UI workflows ([pyproject.toml](pyproject.toml)).
+  - [x] **Path Traversal & SSRF Defense**: Hardened UI file ingestion dialogs with canonical `is_relative_to(Path.cwd().resolve())` path traversal protection ([src/ui/app.py](src/ui/app.py)); upgraded Ollama local URL validation from prefix strings to strict `urllib.parse.urlparse` host validation, preventing userinfo spoofing and non-loopback SSRF ([src/ingestion/extractor.py](src/ingestion/extractor.py)).
+  - [x] **Production Assertion Hardening**: Replaced all production `assert` statements (`S101`) in ingestion and database persistence with explicit `RuntimeError` checks, typed exceptions `(InvalidOperation, TypeError, ValueError)`, and structured debug logging ([src/ingestion/batch.py](src/ingestion/batch.py), [src/storage/database.py](src/storage/database.py), [src/ingestion/pdf_reader.py](src/ingestion/pdf_reader.py)).
+  - [x] **Performance: N+1 Query Elimination**: Optimized `get_all_monthly_statements` and `get_all_maintenance_issues` to batch-fetch child items in single indexed queries, dramatically accelerating ledger load times on large datasets ([src/storage/database.py](src/storage/database.py)).
+  - [x] **LAN & Wi-Fi Multi-Device Access**: Maintained seamless mobile and multi-laptop access by binding the dashboard to `0.0.0.0` by default with explicit `# noqa: S104` documentation for intentional local network hosting ([tools/dashboard.py](tools/dashboard.py)).
+  - [x] **Modular 6-Gate Release Governance**: Updated project release manager to orchestrate the unified 6-gate pipeline, delegating Gate 2 to the modular Quad-Persona reviewer (`reviewer.py`) with OWASP hotspot mapping and running Gate 4 (Hygiene & SAST) prior to Gate 5 (Test Suite) ([tools/release_manager.py](tools/release_manager.py)).
+- **Exit Criteria**: 100% active criteria verified in Spec Guardian (73/73 across 19 active specs), 90/90 passing pytest suite, 0 Ruff security/lint errors, 0 architectural/OWASP violations.
+
+---
+
 ### Release `v1.3.0`: Spec-Driven Development Modernization, 4-Layer AST Verification & Reverse Traceability
 - **Status**: ✅ RELEASED *(Approved by user)*
 - **Focus**: Spec-Driven Development (SDD) & Airtight Two-Way Verification modernization, Spec Guardian 4-layer AST semantic validation, reverse traceability enforcement, `[PLANNED]` roadmap lifecycle management, and test unstacking to strict 1-test-to-1-AC cardinality.
