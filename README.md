@@ -140,67 +140,24 @@ uv run python -m tools.cashflow --net-rent 571.90 --mortgage-debit 1997.00 --bal
 Spec Guardian (`tools.guardian`) acts as the automated architecture and requirement gatekeeper, executing **two-way verification using cryptographic hashes**:
 
 - **Forward Check (Normalized SHA-256 Hashing)**: Every EARS requirement block (`## [REQ-ID]:`) in `specs/` is normalized and cryptographically fingerprinted via SHA-256. Any modification to requirement text, business logic, or acceptance criteria automatically alters the hash, immediately flagging mapped implementations and tests as unverified until audited.
-- **Reverse Check (AST Static Analysis)**: Scans all public classes, methods, and functions across `src/` to verify that 100% of codebase symbols explicitly map back to an approved requirement (`# [spec: REQ-ID]`), mathematically preventing undocumented features and feature-creep.
+- **Reverse Check (Abstract Syntax Tree (AST) Static Analysis)**: Scans all public classes, methods, and functions across `src/` to verify that 100% of codebase symbols explicitly map back to an approved requirement (`# [spec: REQ-ID]`), mathematically preventing undocumented features and feature-creep.
 - **Anti-Mirage Test Verification**: Tests in `tests/` are bound to exact acceptance criteria (`# [verifies: REQ-ID/AC-ID]`), enforcing strict 1-test-to-1-AC cardinality, call-graph symbol assertions, and deterministic numeric checks before release tagging.
 
-### 1. Spec Guardian Traceability Audit
-Verify that all code implementations and tests match their EARS specifications with zero hash drift:
-```bash
-# Focused audit (active/implemented specifications)
-uv run python -m tools.guardian audit
-
-# Full roadmap audit (includes all [PLANNED] future specifications)
-uv run python -m tools.guardian audit --all
-
-# Pre-commit strict audit (fails if any criterion lacks tests or has spec drift)
-uv run python -m tools.guardian audit --strict
-```
-
-### 2. Automated Test Suite
-Run the full test suite verifying acceptance criteria:
-```bash
-uv run pytest
-```
-
-### 3. Code Hygiene & Formatting
-Enforce formatting and lint rules via Ruff:
-```bash
-uv run ruff check --fix .
-uv run ruff format .
-```
 
 ---
 
-## Release Management & Governance
+## Release Management 
 
-Releases follow Semantic Versioning (`MAJOR.MINOR.PATCH`) governed by an automated **6-Gate Release Pipeline** ([tools/release_manager.py](tools/release_manager.py)):
-
-### Governance Principles
-1. **Human-in-the-Loop Approval**: Always obtain explicit confirmation before creating any **MAJOR** or **MINOR** version.
-2. **Four-Pillar Project Review**: Every release candidate must pass automated and manual checks against project ADRs ([ADR.md](ADR.md)) and the project review skill.
-   - **Pillar 1 (Privacy & Local-Only)**: Zero external network endpoints; sensitive documents (`Resources/*.pdf`), live configuration (`config.toml`), and database files (`data/*.db`) excluded from Git.
-   - **Pillar 2 (Deterministic Mathematics)**: All arithmetic uses Python `Decimal` with penny precision; zero `float` conversions in domain models; LLMs strictly confined to document parsing.
-   - **Pillar 3 (Spec Traceability & Config Hygiene)**: 100% of code/tests bound to EARS specifications; zero hardcoded fallback figures; zero property equity tracking or display.
-   - **Pillar 4 (Engineering Health & Anti-Mirage Tests)**: Deterministic assertions with exact numeric anchors; test isolation using temporary fixtures or `config.example.toml`; clean relative paths across all markdown documentation.
-3. **Spec Guardian Gatekeeper**: 100% of active acceptance criteria must be verified with zero spec hash drift before release tagging.
+Releases follow Semantic Versioning (`MAJOR.MINOR.PATCH`) governed by an automated **6-Gate Release Pipeline** :
 
 ### The 6-Gate Release Pipeline
-When `release_manager create` is invoked, the following gates execute sequentially:
+When global release manager skill is invoked, the following gates execute sequentially:
 1. **[Gate 1/6] Git Working Tree Check**: Verifies that no uncommitted or dirty code files exist.
 2. **[Gate 2/6] Four-Pillar Architectural & Code Review Audit**: Runs automated AST and regex scanners across privacy, math, path cleanliness, and configuration rules, verifying 100% compliance with project ADRs.
 3. **[Gate 3/6] Spec Guardian Strict Audit**: Runs `tools.guardian audit --strict` ensuring 100% test coverage and zero spec drift.
 4. **[Gate 4/6] Test Suite**: Executes the full test suite via `uv run pytest`.
 5. **[Gate 5/6] Code Hygiene**: Enforces formatting and lint checks via `uv run ruff check --fix .` and `ruff format .`.
 6. **[Gate 6/6] Version Bump & Annotated Git Tag**: Updates `pyproject.toml`, commits the release manifest changes, and generates an annotated Git tag `v<VERSION>`.
-
-### Release CLI Commands
-```bash
-# List all release tags with summaries:
-uv run python -m tools.release_manager list
-
-# Create a new release (executes all 6 quality gates automatically):
-uv run python -m tools.release_manager create <VERSION> -m "<SUMMARY>"
-```
 
 For the complete version roadmap and historical release notes, see [release.md](release.md).
 
