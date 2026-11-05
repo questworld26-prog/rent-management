@@ -87,11 +87,11 @@ Releases are executed through the automated 6-gate release manager:
   uv run python -m tools.release_manager create <VERSION> -m "<SUMMARY>"
   ```
   This command automatically runs:
-  1. Git working tree validation
-  2. Architectural Compliance & Code Review Audit (ADRs, privacy, relative paths, diff review)
-  3. Spec Guardian strict audit (`--strict`)
-  4. Pytest test suite (`pytest`)
-  5. Code hygiene and formatting (`ruff check --fix` and `ruff format`)
+  1. Git working tree validation (strict block on uncommitted non-manifest files)
+  2. Quad-Persona Code & OWASP Security Review Audit (ADRs, privacy, relative paths, diff review)
+  3. Spec Guardian strict bi-directional audit (`--strict`)
+  4. Code hygiene and formatting (`ruff check --fix` and `ruff format`)
+  5. Pytest test suite (`uv run pytest`)
   6. Version synchronization in `pyproject.toml` and creation of annotated Git tag `v<VERSION>`
 
 
@@ -100,10 +100,6 @@ Releases are executed through the automated 6-gate release manager:
 ## 5. UI/UX Principles for Code Generation
 
 - The dashboard is built with **NiceGUI** (pure Python, rendering Quasar/Vue3 and Tailwind).
-- Maintain the single-property executive layout (no property address header).
-- Support the 4 built-in themes in the top-bar Theme Switcher:
-  1. `Nordic Aurora` (Emerald & Cyan glow on deep charcoal — default)
-  2. `Vibrant Multi-Color` (Color-coded KPI badges: Cyan, Amber, Emerald, Coral)
-  3. `Midnight Sapphire` (Cobalt & Ice Blue)
-  4. `Titanium & Warm Gold` (Champagne Gold & Soft Mint)
+- Maintain the single-property executive layout (no property address header, zero equity displays).
+- Adhere to the unified **Quiet Luxury** design palette (`#0E1015` obsidian surfaces, `#E5C07B` champagne gold accents, `#86EFAC` soft mint earnings, and `#9F1239` warm burgundy shortfall indicators) with local system typography stacks.
 - Avoid jarring page reloads or full-script reruns. Update reactive components in-place.
