@@ -1,0 +1,538 @@
+{
+  "last_audited_at": "2026-11-05T03:40:40.769164+00:00",
+  "total_requirements": 21,
+  "total_criteria": 81,
+  "verified_criteria_count": 73,
+  "planned_requirements_count": 2,
+  "reverse_traceability": {
+    "untagged_files_count": 0,
+    "untagged_src_symbols_count": 0,
+    "untagged_tests_count": 0,
+    "orphan_tags_count": 0
+  },
+  "semantic_alignment": {
+    "stacked_test_tags_count": 0,
+    "cross_link_mismatches_count": 0,
+    "weak_test_assertions_count": 0,
+    "ac_anchor_mismatches_count": 0
+  },
+  "status": "PASS",
+  "requirements": [
+    {
+      "requirement_id": "CONFIG-001",
+      "title": "Project Configuration & Parameter Management",
+      "spec_file": "specs/config/configuration.md",
+      "is_planned": false,
+      "sha256": "56e1075ac7a1ceb071ba9580a32c55b568f7933ab11da563da171bfd4b333d0a",
+      "verified_sha256": "56e1075ac7a1ceb071ba9580a32c55b568f7933ab11da563da171bfd4b333d0a",
+      "acceptance_criteria": [
+        "AC-CONFIG-001.1",
+        "AC-CONFIG-001.2",
+        "AC-CONFIG-001.3",
+        "AC-CONFIG-001.4"
+      ],
+      "verified_criteria": [
+        "AC-CONFIG-001.1",
+        "AC-CONFIG-001.2",
+        "AC-CONFIG-001.3",
+        "AC-CONFIG-001.4"
+      ],
+      "implementation_files": [
+        "src/config.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "CASH-001",
+      "title": "Monthly Mortgage Excess Calculation",
+      "spec_file": "specs/finance/cashflow.md",
+      "is_planned": false,
+      "sha256": "8c24f1e5fdb52d8303e5a6934a0a7307b75f36aebb62134b9953bb8ef100ac69",
+      "verified_sha256": "8c24f1e5fdb52d8303e5a6934a0a7307b75f36aebb62134b9953bb8ef100ac69",
+      "acceptance_criteria": [
+        "AC-CASH-001.1",
+        "AC-CASH-001.2",
+        "AC-CASH-001.3",
+        "AC-CASH-001.4"
+      ],
+      "verified_criteria": [
+        "AC-CASH-001.1",
+        "AC-CASH-001.2",
+        "AC-CASH-001.3",
+        "AC-CASH-001.4"
+      ],
+      "implementation_files": [
+        "src/domain/cashflow.py",
+        "src/domain/models.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "MORT-001",
+      "title": "Mortgage Terms Configuration & Progress Bar",
+      "spec_file": "specs/finance/mortgage.md",
+      "is_planned": false,
+      "sha256": "8aa6e6a51252fd82ae0cc40e015b959df72c8e74a55620705a48fd6e0cbe12c3",
+      "verified_sha256": "8aa6e6a51252fd82ae0cc40e015b959df72c8e74a55620705a48fd6e0cbe12c3",
+      "acceptance_criteria": [
+        "AC-MORT-001.1",
+        "AC-MORT-001.2",
+        "AC-MORT-001.3",
+        "AC-MORT-001.4"
+      ],
+      "verified_criteria": [
+        "AC-MORT-001.1",
+        "AC-MORT-001.2",
+        "AC-MORT-001.3",
+        "AC-MORT-001.4"
+      ],
+      "implementation_files": [
+        "src/domain/models.py",
+        "src/domain/mortgage.py",
+        "src/storage/database.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "MORT-002",
+      "title": "Multi-Graph Mortgage Analytics",
+      "spec_file": "specs/finance/mortgage.md",
+      "is_planned": false,
+      "sha256": "fd85e888b7531b6eee078cdf7eebe052bc6e60b9996802e0eb1e4456f27d60b5",
+      "verified_sha256": "fd85e888b7531b6eee078cdf7eebe052bc6e60b9996802e0eb1e4456f27d60b5",
+      "acceptance_criteria": [
+        "AC-MORT-002.1",
+        "AC-MORT-002.2",
+        "AC-MORT-002.3",
+        "AC-MORT-002.4"
+      ],
+      "verified_criteria": [
+        "AC-MORT-002.1",
+        "AC-MORT-002.2",
+        "AC-MORT-002.3",
+        "AC-MORT-002.4"
+      ],
+      "implementation_files": [
+        "src/domain/mortgage.py",
+        "src/ui/app.py",
+        "src/ui/components.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "TAX-001",
+      "title": "UK Financial Year Tax Aggregation",
+      "spec_file": "specs/finance/tax_year.md",
+      "is_planned": true,
+      "sha256": "56cd81211ed1daa4fa7d52aced02cc10bdcad6be236a85e3edfa5c3d63aff40c",
+      "verified_sha256": null,
+      "acceptance_criteria": [
+        "AC-TAX-001.1",
+        "AC-TAX-001.2",
+        "AC-TAX-001.3",
+        "AC-TAX-001.4"
+      ],
+      "verified_criteria": [],
+      "implementation_files": [],
+      "status": "PLANNED"
+    },
+    {
+      "requirement_id": "INGEST-001",
+      "title": "Offline PDF Extraction via Local Ollama",
+      "spec_file": "specs/ingestion/pdf_ingestion.md",
+      "is_planned": false,
+      "sha256": "39004280f336b938053baca02312aaa5487b203ffe80eb268a281208a6ac7b6c",
+      "verified_sha256": "39004280f336b938053baca02312aaa5487b203ffe80eb268a281208a6ac7b6c",
+      "acceptance_criteria": [
+        "AC-INGEST-001.1",
+        "AC-INGEST-001.2",
+        "AC-INGEST-001.3",
+        "AC-INGEST-001.4"
+      ],
+      "verified_criteria": [
+        "AC-INGEST-001.1",
+        "AC-INGEST-001.2",
+        "AC-INGEST-001.3",
+        "AC-INGEST-001.4"
+      ],
+      "implementation_files": [
+        "src/domain/models.py",
+        "src/ingestion/batch.py",
+        "src/ingestion/extractor.py",
+        "src/ingestion/pdf_reader.py",
+        "src/storage/database.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "INGEST-002",
+      "title": "Strict Two-Level Duplicate Detection & Same-Month Statement Policy",
+      "spec_file": "specs/ingestion/pdf_ingestion.md",
+      "is_planned": false,
+      "sha256": "63d0c4bd29b16819d03c4ddaca6f3de67090df67d260cc5534418aa1a6aaa264",
+      "verified_sha256": "63d0c4bd29b16819d03c4ddaca6f3de67090df67d260cc5534418aa1a6aaa264",
+      "acceptance_criteria": [
+        "AC-INGEST-002.1",
+        "AC-INGEST-002.2",
+        "AC-INGEST-002.3",
+        "AC-INGEST-002.4"
+      ],
+      "verified_criteria": [
+        "AC-INGEST-002.1",
+        "AC-INGEST-002.2",
+        "AC-INGEST-002.3",
+        "AC-INGEST-002.4"
+      ],
+      "implementation_files": [
+        "src/domain/models.py",
+        "src/ingestion/batch.py",
+        "src/ingestion/duplicate_checker.py",
+        "src/storage/database.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "INGEST-003",
+      "title": "Deterministic Financial Reconciliation",
+      "spec_file": "specs/ingestion/pdf_ingestion.md",
+      "is_planned": false,
+      "sha256": "004a76de7a5a97ea60f8d644500f41b41a92f5765e4f75e0af519ef586ca2d39",
+      "verified_sha256": "004a76de7a5a97ea60f8d644500f41b41a92f5765e4f75e0af519ef586ca2d39",
+      "acceptance_criteria": [
+        "AC-INGEST-003.1",
+        "AC-INGEST-003.2",
+        "AC-INGEST-003.3",
+        "AC-INGEST-003.4"
+      ],
+      "verified_criteria": [
+        "AC-INGEST-003.1",
+        "AC-INGEST-003.2",
+        "AC-INGEST-003.3",
+        "AC-INGEST-003.4"
+      ],
+      "implementation_files": [
+        "src/domain/models.py",
+        "src/ingestion/batch.py",
+        "src/ingestion/reconciler.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "INGEST-004",
+      "title": "Directory Batch PDF Ingestion & Summary Reporting",
+      "spec_file": "specs/ingestion/pdf_ingestion.md",
+      "is_planned": false,
+      "sha256": "e8ef9e2bc30268478b02da54187c6b16901cea410d7206e16511a842c738f161",
+      "verified_sha256": "e8ef9e2bc30268478b02da54187c6b16901cea410d7206e16511a842c738f161",
+      "acceptance_criteria": [
+        "AC-INGEST-004.1",
+        "AC-INGEST-004.2",
+        "AC-INGEST-004.3",
+        "AC-INGEST-004.4"
+      ],
+      "verified_criteria": [
+        "AC-INGEST-004.1",
+        "AC-INGEST-004.2",
+        "AC-INGEST-004.3",
+        "AC-INGEST-004.4"
+      ],
+      "implementation_files": [
+        "src/ingestion/batch.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "INGEST-005",
+      "title": "Ingestion Processing Time & Benchmark Metrics",
+      "spec_file": "specs/ingestion/pdf_ingestion.md",
+      "is_planned": false,
+      "sha256": "f2e2f23aa5dbf0209b493aa8f538cc0289685a93c101079de872c7d035c7cdae",
+      "verified_sha256": "f2e2f23aa5dbf0209b493aa8f538cc0289685a93c101079de872c7d035c7cdae",
+      "acceptance_criteria": [
+        "AC-INGEST-005.1",
+        "AC-INGEST-005.2",
+        "AC-INGEST-005.3"
+      ],
+      "verified_criteria": [
+        "AC-INGEST-005.1",
+        "AC-INGEST-005.2",
+        "AC-INGEST-005.3"
+      ],
+      "implementation_files": [
+        "src/ingestion/batch.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "INGEST-006",
+      "title": "Document Relevance Classification & Scope Guard",
+      "spec_file": "specs/ingestion/pdf_ingestion.md",
+      "is_planned": false,
+      "sha256": "f58c654448b3952c6ab58b94e549262834fb87cee20c1b7419ab83292fbbf3c5",
+      "verified_sha256": "f58c654448b3952c6ab58b94e549262834fb87cee20c1b7419ab83292fbbf3c5",
+      "acceptance_criteria": [
+        "AC-INGEST-006.1",
+        "AC-INGEST-006.2",
+        "AC-INGEST-006.3",
+        "AC-INGEST-006.4"
+      ],
+      "verified_criteria": [
+        "AC-INGEST-006.1",
+        "AC-INGEST-006.2",
+        "AC-INGEST-006.3",
+        "AC-INGEST-006.4"
+      ],
+      "implementation_files": [
+        "src/domain/models.py",
+        "src/ingestion/batch.py",
+        "src/ingestion/classifier.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "INGEST-007",
+      "title": "Degradation Resilience & Scanned PDF Handling",
+      "spec_file": "specs/ingestion/pdf_ingestion.md",
+      "is_planned": false,
+      "sha256": "f983c57f2eb7a1dd9ca0dd671544559bba8b02b2e627a2f6f949d63e38092b9e",
+      "verified_sha256": "f983c57f2eb7a1dd9ca0dd671544559bba8b02b2e627a2f6f949d63e38092b9e",
+      "acceptance_criteria": [
+        "AC-INGEST-007.1",
+        "AC-INGEST-007.2",
+        "AC-INGEST-007.3"
+      ],
+      "verified_criteria": [
+        "AC-INGEST-007.1",
+        "AC-INGEST-007.2",
+        "AC-INGEST-007.3"
+      ],
+      "implementation_files": [
+        "src/ingestion/batch.py",
+        "src/ingestion/pdf_reader.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "INGEST-008",
+      "title": "Live Ingestion Progress Indicator & Processing Status Tickets",
+      "spec_file": "specs/ingestion/pdf_ingestion.md",
+      "is_planned": false,
+      "sha256": "b2aee113dd219d55691e95567ea5410df6bb2b00daf2dbee71d6f83146cd9570",
+      "verified_sha256": "b2aee113dd219d55691e95567ea5410df6bb2b00daf2dbee71d6f83146cd9570",
+      "acceptance_criteria": [
+        "AC-INGEST-008.1",
+        "AC-INGEST-008.2",
+        "AC-INGEST-008.3"
+      ],
+      "verified_criteria": [
+        "AC-INGEST-008.1",
+        "AC-INGEST-008.2",
+        "AC-INGEST-008.3"
+      ],
+      "implementation_files": [
+        "src/ingestion/batch.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "COMP-001",
+      "title": "Statutory Compliance Register & Expiry Alerting",
+      "spec_file": "specs/operations/compliance_certs.md",
+      "is_planned": false,
+      "sha256": "69a67697abcdd2e8a0f2213d691e835f43884d24aba9abef2792f7f91a89ca99",
+      "verified_sha256": "69a67697abcdd2e8a0f2213d691e835f43884d24aba9abef2792f7f91a89ca99",
+      "acceptance_criteria": [
+        "AC-COMP-001.1",
+        "AC-COMP-001.2",
+        "AC-COMP-001.3",
+        "AC-COMP-001.4",
+        "AC-COMP-001.5"
+      ],
+      "verified_criteria": [
+        "AC-COMP-001.1",
+        "AC-COMP-001.2",
+        "AC-COMP-001.3",
+        "AC-COMP-001.4",
+        "AC-COMP-001.5"
+      ],
+      "implementation_files": [
+        "src/domain/compliance.py",
+        "src/storage/database.py",
+        "src/ui/app.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "UI-001",
+      "title": "Monthly Statements Ledger & Trend Graphs",
+      "spec_file": "specs/operations/executive_ui.md",
+      "is_planned": false,
+      "sha256": "614aa17b6aa89c99b955d464c37395acf8d9e078eb0941a1d4fdc4e1c92fdccc",
+      "verified_sha256": "614aa17b6aa89c99b955d464c37395acf8d9e078eb0941a1d4fdc4e1c92fdccc",
+      "acceptance_criteria": [
+        "AC-UI-001.1",
+        "AC-UI-001.2",
+        "AC-UI-001.3",
+        "AC-UI-001.4",
+        "AC-UI-001.5"
+      ],
+      "verified_criteria": [
+        "AC-UI-001.1",
+        "AC-UI-001.2",
+        "AC-UI-001.3",
+        "AC-UI-001.4",
+        "AC-UI-001.5"
+      ],
+      "implementation_files": [
+        "src/storage/database.py",
+        "src/ui/app.py",
+        "src/ui/components.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "UI-002",
+      "title": "Contractor Invoices Ledger & Maintenance Items",
+      "spec_file": "specs/operations/executive_ui.md",
+      "is_planned": false,
+      "sha256": "9413ffbf2fc3eca11652b6b5f156d7ac378510173951cf40b5abd04ac02fa728",
+      "verified_sha256": "9413ffbf2fc3eca11652b6b5f156d7ac378510173951cf40b5abd04ac02fa728",
+      "acceptance_criteria": [
+        "AC-UI-002.1",
+        "AC-UI-002.2"
+      ],
+      "verified_criteria": [
+        "AC-UI-002.1",
+        "AC-UI-002.2"
+      ],
+      "implementation_files": [
+        "src/storage/database.py",
+        "src/ui/app.py",
+        "src/ui/components.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "UI-003",
+      "title": "Executive Quiet Luxury Design System & Loan Payoff Progress",
+      "spec_file": "specs/operations/executive_ui.md",
+      "is_planned": false,
+      "sha256": "89757e2a1551a8de24ef6aef19945808eb05f55a380e4221ba4b3b7c3fca68e6",
+      "verified_sha256": "89757e2a1551a8de24ef6aef19945808eb05f55a380e4221ba4b3b7c3fca68e6",
+      "acceptance_criteria": [
+        "AC-UI-003.1",
+        "AC-UI-003.2",
+        "AC-UI-003.3",
+        "AC-UI-003.4",
+        "AC-UI-003.5"
+      ],
+      "verified_criteria": [
+        "AC-UI-003.1",
+        "AC-UI-003.2",
+        "AC-UI-003.3",
+        "AC-UI-003.4",
+        "AC-UI-003.5"
+      ],
+      "implementation_files": [
+        "src/storage/database.py",
+        "src/ui/app.py",
+        "src/ui/components.py",
+        "src/ui/theme.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "ISSUE-001",
+      "title": "Auto-Detect & Suggest Maintenance Issues",
+      "spec_file": "specs/operations/issues_maintenance.md",
+      "is_planned": false,
+      "sha256": "dabdb97a0b7310a651e0eda0855ffcfb0d8d4850cda3e31c48c63d923cda4fc3",
+      "verified_sha256": "dabdb97a0b7310a651e0eda0855ffcfb0d8d4850cda3e31c48c63d923cda4fc3",
+      "acceptance_criteria": [
+        "AC-ISSUE-001.1",
+        "AC-ISSUE-001.2",
+        "AC-ISSUE-001.3"
+      ],
+      "verified_criteria": [
+        "AC-ISSUE-001.1",
+        "AC-ISSUE-001.2",
+        "AC-ISSUE-001.3"
+      ],
+      "implementation_files": [
+        "src/domain/issues.py",
+        "src/storage/database.py",
+        "src/ui/app.py",
+        "src/ui/components.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "ISSUE-002",
+      "title": "Maintenance Issue Lifecycle & Notes",
+      "spec_file": "specs/operations/issues_maintenance.md",
+      "is_planned": false,
+      "sha256": "919b0aed0002f478a155328ae54f43ef1339a4ac8631cd5ddf412f69062f9c2b",
+      "verified_sha256": "919b0aed0002f478a155328ae54f43ef1339a4ac8631cd5ddf412f69062f9c2b",
+      "acceptance_criteria": [
+        "AC-ISSUE-002.1",
+        "AC-ISSUE-002.2",
+        "AC-ISSUE-002.3",
+        "AC-ISSUE-002.4",
+        "AC-ISSUE-002.5"
+      ],
+      "verified_criteria": [
+        "AC-ISSUE-002.1",
+        "AC-ISSUE-002.2",
+        "AC-ISSUE-002.3",
+        "AC-ISSUE-002.4",
+        "AC-ISSUE-002.5"
+      ],
+      "implementation_files": [
+        "src/domain/issues.py",
+        "src/storage/database.py",
+        "src/ui/app.py",
+        "src/ui/components.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "ISSUE-003",
+      "title": "Retrospective Issue Extraction from Invoices",
+      "spec_file": "specs/operations/issues_maintenance.md",
+      "is_planned": false,
+      "sha256": "36e4938e061516ef5d98ac5617b0d5098419cf51f7e3ab452212ebba232dc467",
+      "verified_sha256": "36e4938e061516ef5d98ac5617b0d5098419cf51f7e3ab452212ebba232dc467",
+      "acceptance_criteria": [
+        "AC-ISSUE-003.1",
+        "AC-ISSUE-003.2",
+        "AC-ISSUE-003.3"
+      ],
+      "verified_criteria": [
+        "AC-ISSUE-003.1",
+        "AC-ISSUE-003.2",
+        "AC-ISSUE-003.3"
+      ],
+      "implementation_files": [
+        "src/storage/database.py"
+      ],
+      "status": "VERIFIED"
+    },
+    {
+      "requirement_id": "TENANT-001",
+      "title": "Tenancy Period Configuration & Historical Analytics",
+      "spec_file": "specs/tenants/tenant_management.md",
+      "is_planned": true,
+      "sha256": "b10c4acd485afab031d7d41b6d88b62b9df1bcc20c69da82932222cf73dbbfd1",
+      "verified_sha256": null,
+      "acceptance_criteria": [
+        "AC-TENANT-001.1",
+        "AC-TENANT-001.2",
+        "AC-TENANT-001.3",
+        "AC-TENANT-001.4"
+      ],
+      "verified_criteria": [],
+      "implementation_files": [],
+      "status": "PLANNED"
+    }
+  ]
+}

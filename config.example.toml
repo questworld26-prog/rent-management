@@ -1,0 +1,14 @@
+[ollama]
+model = "llama3.2:3b"
+base_url = "http://localhost:11434"
+
+[mortgage]
+monthly_direct_debit = "1000.00"
+interest_rate = "4.25"
+fixed_deal_end_date = "31-10-2028"
+effective_from = "01-01-2026"
+initial_principal = "200000.00"
+# Consent to Let configuration (optional)
+consent_to_let_granted = true
+consent_to_let_start_date = "01-01-2026"
+consent_to_let_end_date = "31-12-2026"
